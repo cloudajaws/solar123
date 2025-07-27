@@ -1,0 +1,45 @@
+Resources:
+  Myec2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-054b7fc3c333ac6d2
+      InstanceType: t2.micro
+      KeyName: Oregonkeyaws
+      SecurityGroupIds:
+        - !Ref MySG
+      SubnetId: subnet-09ab8ec53f8df213a
+      Tags:
+        - Key: Name
+          Value: CFT-Instance
+  MySG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http and ssh
+      GroupName: maywebserG/OREGONVPC
+      SecurityGroupIngress:
+        - IpProtocol: -1
+           CidrIp: 0.0.0.0/0
+
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: "Name" 
+          Value: "maywebserG/OREGONVPC"
+      VpcId: vpc-06e1ba9b77b6ff961
+      
+
+Outputs:
+  MyInstanceID:
+    Description: App FrontEnd
+    Value: !Ref Myec2
+  MySecurityGroupID:
+    Value: !Ref MySG
+  MyInstancePrivateIP:
+    Value: !GetAtt Myec2.PrivateIP
